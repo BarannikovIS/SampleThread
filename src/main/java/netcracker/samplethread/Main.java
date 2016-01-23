@@ -26,7 +26,8 @@ public class Main {
     }
 
     public static void TestMatrix() {
-        int m = 3;
+        int m = 50;
+        int threads = 8;
         int[][] mas1 = new int[m][m];
         int[][] mas2 = new int[m][m];
         matrixProduct = new int[m][m];
@@ -40,10 +41,11 @@ public class Main {
                 mas2[i][j] = j;
             }
         }
-        int threads = m;
+        
+        int range = m / threads;
         MatrixMultiplier[] multiplier = new MatrixMultiplier[threads];
         for (int i = 0; i < threads; i++) {
-            multiplier[i] = new MatrixMultiplier(mas1, mas2, i);
+            multiplier[i] = new MatrixMultiplier(mas1, mas2, i*range,(i+1)*range);
             multiplier[i].start();
         }
 

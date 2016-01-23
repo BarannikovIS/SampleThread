@@ -12,24 +12,28 @@ import static netcracker.samplethread.Main.matrixProduct;
  * @author Иван
  */
 public class MatrixMultiplier extends Thread {
+
     private int[][] mas1;
     private int[][] mas2;
-    private int num; //номер строки в первой матрице, которую нужно перемножить на все столбцы 2 матрицы в данном потоке
+    private int start,stop; //диапазон строк в первой матрице, которую нужно перемножить на этот диапазон столбцов 2 матрицы в данном потоке
 
-    public MatrixMultiplier(int[][] mas1, int[][] mas2, int num) {
+    public MatrixMultiplier(int[][] mas1, int[][] mas2, int start, int stop) {
         this.mas1 = mas1;
         this.mas2 = mas2;
-        this.num=num;
+        this.start = start;
+        this.stop = stop;
     }
 
     @Override
     public void run() {
+        for (int i = start; i < stop; i++) {
             for (int j = 0; j < mas2.length; j++) {
                 int sum = 0;
                 for (int r = 0; r < mas2.length; r++) {
-                    sum = sum + mas1[num][r] * mas2[r][j];
+                    sum = sum + mas1[i][r] * mas2[r][j];
                 }
-                matrixProduct[num][j] = sum;
+                matrixProduct[i][j] = sum;
             }
+        }
     }
 }
