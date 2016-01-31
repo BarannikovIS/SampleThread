@@ -6,6 +6,7 @@
 package netcracker.samplethread;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
@@ -31,21 +32,27 @@ public class Main {
         int[][] mas1 = new int[m][m];
         int[][] mas2 = new int[m][m];
         matrixProduct = new int[m][m];
+
+        Random rnd = new Random();
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {
-                mas1[i][j] = i;
+                mas1[i][j] = rnd.nextInt(50);
             }
         }
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < m; j++) {
-                mas2[i][j] = j;
+                mas2[i][j] = rnd.nextInt(50);
             }
         }
-        
+
         int range = m / threads;
         MatrixMultiplier[] multiplier = new MatrixMultiplier[threads];
         for (int i = 0; i < threads; i++) {
-            multiplier[i] = new MatrixMultiplier(mas1, mas2, i*range,(i+1)*range);
+            if (i == threads - 1) {
+                multiplier[i] = new MatrixMultiplier(mas1, mas2, i * range, m);
+            } else {
+                multiplier[i] = new MatrixMultiplier(mas1, mas2, i * range, (i + 1) * (range));
+            }
             multiplier[i].start();
         }
 
@@ -59,7 +66,7 @@ public class Main {
 
         for (int k = 0; k < matrixProduct.length; k++) {
             for (int f = 0; f < matrixProduct.length; f++) {
-                Log.info("index row " + f + " column index " + f + " value of the item " + matrixProduct[k][f]);
+                Log.info("index row " + k + " column index " + f + " value of the item " + matrixProduct[k][f]);
             }
         }
     }
